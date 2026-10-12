@@ -12,6 +12,10 @@
     <meta property="og:description" content="Explore games and applications developed by Yohan.">
     <meta property="og:type" content="website">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
     <!-- Devicon Icons -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
@@ -33,12 +37,12 @@
             </a>
 
             <!-- Mobile Menu Toggle Button -->
-            <button class="nav-toggle" aria-label="toggle navigation" aria-expanded="false">
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation">
                 <span class="hamburger"></span>
             </button>
 
             <!-- Navigation Links -->
-            <div class="nav-links">
+            <div class="nav-links" id="primary-navigation">
                 <a href="#home">Home</a>
                 <a href="#projects">Projects</a>
                 <a href="#about">About</a>
@@ -55,13 +59,10 @@
     <section id="home" class="hero">
         <div class="hero-content">
 
-            <div class="hero-badge">
-                <span class="status-dot"></span> Available for projects & roles
-            </div>
 
             <p class="hero-intro">Hello, I'm <strong>Yohan Yoon</strong></p>
 
-            <h1>Crafting Interactive Games & <br><span>Mobile Applications.</span></h1>
+            <h1>Games and apps,<br><span>built to be played.</span></h1>
 
             <p class="hero-description">
                 A Game Development student and software developer turning ideas into immersive gameplay experiences and seamless mobile software.
@@ -72,6 +73,14 @@
                 <a href="pdfs/Resume_YY_SWD.pdf" class="btn secondary" download>Download Resume</a>
             </div>
 
+        </div>
+
+        <div class="hero-art" aria-label="Featured game project">
+            <img src="images/safestep.jpg" alt="Thumbnail for SafeStep">
+            <div class="hero-art-label">
+                <span>FEATURED APP</span>
+                <strong>Safe Step</strong>
+            </div>
         </div>
     </section>
 
@@ -95,7 +104,7 @@
         </div>
 
         <!-- Project Grid -->
-        <div id="projects-grid" class="projects-grid"></div>
+        <div id="projects-grid" class="projects-grid" aria-live="polite"></div>
 
     </section>
 
@@ -129,8 +138,6 @@
                     <span><i class="devicon-xcode-plain colored"></i> Xcode</span>
                     <span><i class="devicon-flutter-plain colored"></i> Flutter</span>
                     <span><i class="devicon-dart-plain colored"></i> Dart</span>
-                    <span><i class="devicon-firebase-plain colored"></i> Firebase</span>
-                    <span><i class="devicon-git-plain colored"></i> Git</span>
                     <span><i class="devicon-github-original"></i> GitHub</span>
                 </div>
             </div>
@@ -224,6 +231,7 @@
             <div class="modal-body">
                 <p id="modal-type" class="project-type"></p>
                 <h2 id="modal-title"></h2>
+                <span id="modal-date" class="modal-date"></span>
                 <p id="modal-description"></p>
 
                 <!-- YouTube Video Container -->

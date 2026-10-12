@@ -76,6 +76,32 @@ const projects = {
     app1: {
         category: "app",
         type: "APP",
+        title: "Safe Step",
+        date: "10/2026", // 날짜 추가
+        image: "images/safestep.jpg",
+        description:
+            "SafeStep is an AI-powered walking assistant that uses real-time object detection and " +
+            "voice guidance to help visually impaired individuals navigate their surroundings more safely and independently ",
+        technologies: [
+            { name: "Flutter", icon: "devicon-flutter-plain" },
+            { name: "Dart", icon: "devicon-dart-plain" },
+            { name: "Python", icon: "devicon-python-plain" },
+            { name: "FastAPI", icon: "devicon-fastapi-plain" },
+            { name: "ElevenLabsAPI", icon: "devicon-elevenlabs-plain" },
+            { name: "YOLO-World", icon: "devicon-tensorflow-plain" },
+            { name: "GitHub", icon: "devicon-github-plain"}
+        ],
+        youtubeId: "",
+        github: "https://github.com/Yohan678/LOLFinder.git", // 값이 존재하므로 표시됨
+        demo: ""
+    },
+
+    /* =====================================================
+        APP 2
+    ===================================================== */
+    app2: {
+        category: "app",
+        type: "APP",
         title: "LOL Profile Finder",
         date: "02/2026", // 날짜 추가
         image: "images/lolfinder.png",
@@ -93,9 +119,9 @@ const projects = {
     },
 
     /* =====================================================
-        APP 2
+        APP 3
     ===================================================== */
-    app2: {
+    app3: {
         category: "app",
         type: "APP",
         title: "Focus Pomodoro",
@@ -125,6 +151,9 @@ const projectsGrid = document.getElementById("projects-grid");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const modal = document.getElementById("project-modal");
 const modalClose = document.getElementById("modal-close");
+const navToggle = document.querySelector(".nav-toggle");
+const navLinks = document.getElementById("primary-navigation");
+let previouslyFocusedElement = null;
 
 
 /* =========================================================
@@ -156,9 +185,19 @@ function createProjectCard(projectId, project) {
     const card = document.createElement("div");
     card.className = "project-card";
     card.dataset.category = project.category;
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-haspopup", "dialog");
 
     card.addEventListener("click", function () {
         openProject(projectId);
+    });
+
+    card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openProject(projectId);
+        }
     });
 
     /* --- Image --- */
@@ -226,7 +265,14 @@ function createProjectCard(projectId, project) {
 function renderProjects(filter = "all") {
     projectsGrid.innerHTML = "";
 
-    Object.entries(projects).forEach(function ([projectId, project]) {
+    const sortedProjects = Object.entries(projects).sort(function ([, projectA], [, projectB]) {
+        const [monthA, yearA] = (projectA.date || "01/0000").split("/").map(Number);
+        const [monthB, yearB] = (projectB.date || "01/0000").split("/").map(Number);
+
+        return yearB - yearA || monthB - monthA;
+    });
+
+    sortedProjects.forEach(function ([projectId, project]) {
         if (filter !== "all" && project.category !== filter) {
             return;
         }
@@ -245,9 +291,11 @@ filterButtons.forEach(function (button) {
     button.addEventListener("click", function () {
         filterButtons.forEach(function (btn) {
             btn.classList.remove("active");
+            btn.setAttribute("aria-selected", "false");
         });
 
         button.classList.add("active");
+        button.setAttribute("aria-selected", "true");
         const filter = button.dataset.filter;
         renderProjects(filter);
     });
@@ -270,6 +318,8 @@ function openProject(projectId) {
         console.error("Project modal not found.");
         return;
     }
+
+    previouslyFocusedElement = document.activeElement;
 
     /* Modal Elements */
     const modalImage = document.getElementById("modal-image");
@@ -335,7 +385,9 @@ function openProject(projectId) {
     /* Show Modal */
     modal.classList.add("active");
     modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("no-scroll");
+    if (modalClose) modalClose.focus();
 }
 
 
@@ -348,6 +400,7 @@ function closeProject() {
 
     modal.classList.remove("active");
     modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
 
     const youtube = document.getElementById("modal-youtube");
     if (youtube) {
@@ -355,6 +408,30 @@ function closeProject() {
     }
 
     document.body.classList.remove("no-scroll");
+    if (previouslyFocusedElement) previouslyFocusedElement.focus();
+}
+
+
+/* =========================================================
+   MOBILE NAVIGATION
+========================================================= */
+
+function closeNavigation() {
+    if (!navToggle || !navLinks) return;
+    navToggle.setAttribute("aria-expanded", "false");
+    navLinks.classList.remove("is-open");
+}
+
+if (navToggle && navLinks) {
+    navToggle.addEventListener("click", function () {
+        const isExpanded = navToggle.getAttribute("aria-expanded") === "true";
+        navToggle.setAttribute("aria-expanded", String(!isExpanded));
+        navLinks.classList.toggle("is-open", !isExpanded);
+    });
+
+    navLinks.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeNavigation);
+    });
 }
 
 
@@ -375,7 +452,7 @@ if (modal) {
 }
 
 document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && modal && modal.classList.contains("active")) {
         closeProject();
     }
 });
