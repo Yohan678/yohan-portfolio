@@ -91,8 +91,8 @@ const projects = {
             { name: "YOLO-World", icon: "devicon-tensorflow-plain" },
             { name: "GitHub", icon: "devicon-github-plain"}
         ],
-        youtubeId: "",
-        github: "https://github.com/Yohan678/LOLFinder.git", // 값이 존재하므로 표시됨
+        youtubeId: "8KmzF3tsJvU",
+        github: "https://github.com/Yohan678/nodata_eye",
         demo: ""
     },
 
